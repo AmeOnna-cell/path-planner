@@ -1,0 +1,153 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import Image from "next/image";
+import { MessageSquare, MapPin, Layers, Send, Star } from "lucide-react";
+import MapComponent from "@/components/map";
+
+const allPlaces = [
+  { title: "Paoay Church", type: "Church", timeRange: "6:00 AM - 6:00 PM", rating: 4.8, description: "UNESCO World Heritage baroque church" },
+  { title: "Bangui Windmills", type: "Landmark", timeRange: "Open 24 hours", rating: 4.6, description: "Iconic wind farm along the coast" },
+  { title: "Pagudpud Beach", type: "Beach", timeRange: "Open 24 hours", rating: 4.9, description: "Crystal clear waters and white sand" },
+  { title: "Fort Ilocandia", type: "Resort", timeRange: "8:00 AM - 10:00 PM", rating: 4.5, description: "Luxury resort with golf course" },
+  { title: "Sinking Bell Tower", type: "Historical", timeRange: "7:00 AM - 5:00 PM", rating: 4.4, description: "Historic bell tower sinking into ground" },
+  { title: "Cape Bojeador", type: "Lighthouse", timeRange: "8:00 AM - 5:00 PM", rating: 4.7, description: "Century-old Spanish lighthouse" },
+  { title: "Marcos Museum", type: "Museum", timeRange: "9:00 AM - 4:00 PM", rating: 4.3, description: "Historical museum showcasing local heritage" },
+  { title: "Malacañang of the North", type: "Museum", timeRange: "9:00 AM - 4:00 PM", rating: 4.2, description: "Presidential museum and cultural center" },
+  { title: "La Paz Sand Dunes", type: "Nature", timeRange: "6:00  - 6:00 PM", rating: 4.6, description: "Desert-like sand dunes for adventure" },
+  { title: "Kapurpurawan Rock", type: "Nature", timeRange: "6:00 AM - 6:00 PM", rating: 4.7, description: "Unique white limestone rock formation" },
+];
+
+function getIsOpen(timeRange) {
+  if (timeRange === "Open 24 hours") return true;
+  
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinute = now.getMinutes();
+  const currentTime = currentHour * 60 + currentMinute;
+
+  const [start, end] = timeRange.split(" - ");
+  
+  const parseTime = (time) => {
+    const [hourMin, period] = time.split(" ");
+    let [hours, minutes] = hourMin.split(":").map(Number);
+    if (period === "PM" && hours !== 12) hours += 12;
+    if (period === "AM" && hours === 12) hours = 0;
+    return hours * 60 + minutes;
+  };
+
+  const startTime = parseTime(start);
+  const endTime = parseTime(end);
+
+  return currentTime >= startTime && currentTime <= endTime;
+}
+
+export default function Map() {
+  // Sort places: open places first, closed places at the bottom
+  const sortedPlaces = [...allPlaces].sort((a, b) => {
+    const aIsOpen = getIsOpen(a.timeRange);
+    const bIsOpen = getIsOpen(b.timeRange);
+    
+    if (aIsOpen && !bIsOpen) return -1;
+    if (!aIsOpen && bIsOpen) return 1;
+    return 0;
+  });
+
+  return (
+    <div className="relative min-h-screen bg-slate-50 font-sans text-slate-900 overflow-hidden selection:bg-orange-100">
+      {/* Navbar */}
+      <nav className="bg-white border-b border-slate-200 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 font-medium text-xl tracking-tight">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg text-white">
+                <Image src="/map-pin-area.svg" alt="Ilocos Norte Tourism Path Planner" width={20} height={20} />
+              </span>
+              <span>Ilocos Norte Tourism Path Planner</span>
+            </div>
+          </div>
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+            <div className="transition-colors hover:text-black">
+              Bring joy to your journey.
+            </div>
+            <span className="h-4 w-px bg-slate-200"></span>
+            <Button
+              asChild
+              variant="secondary"
+              className="rounded-full bg-slate-100 px-5 font-medium text-slate-900 hover:bg-slate-200"
+            >
+              <Link href="/onboarding">Reset Planning</Link>
+            </Button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Main Content - 3 Column Layout */}
+      <main className="flex h-[calc(100vh-73px)]">
+        {/* Left Panel - AI Chatbot */}
+        {/* Jeiwinfre's code will go here */}
+
+        {/* Middle Panel - Destination Cards */}
+        <section className="w-[420px] bg-white border-r border-slate-200 flex flex-col">
+          <div className="p-4 border-b border-slate-200">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+                <Layers size={18} />
+                <span>Destinations</span>
+              </div>
+              <span className="text-xs text-slate-500">{sortedPlaces.length} places</span>
+            </div>
+          </div>
+          <div className="flex-1 p-4 overflow-y-auto">
+            {/* Destination cards */}
+            <div className="grid grid-cols-2 gap-3">
+              {sortedPlaces.map((place, index) => (
+                <div
+                  key={index}
+                  className="bg-slate-50 rounded-xl border border-slate-100 hover:border-slate-300 hover:shadow-sm transition-all cursor-pointer overflow-hidden"
+                >
+                  {/* Photo placeholder */}
+                  <div className="aspect-square bg-slate-200 relative">
+                    <div className="absolute inset-0 flex items-center justify-center text-slate-400 text-xs">
+                      Photo
+                    </div>
+                  </div>
+                  {/* Card Content */}
+                  <div className="p-3 space-y-1">
+                    <div className="flex justify-between items-start gap-1">
+                      <h3 className="font-semibold text-slate-900 text-sm line-clamp-1">{place.title}</h3>
+                      <div className="flex items-center gap-0.5 text-xs shrink-0">
+                        <Star className="w-3 h-3 fill-slate-900 text-slate-900" />
+                        <span>{place.rating}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs">
+                      <span className="text-slate-500">{place.timeRange}</span>
+                      <span className={`font-medium ${getIsOpen(place.timeRange) ? 'text-green-600' : 'text-red-600'}`}>
+                        {getIsOpen(place.timeRange) ? '· Open' : '· Closed'}
+                      </span>
+                    </div>
+                    <p className="text-slate-500 text-xs">{place.type}</p>
+                    <p className="text-slate-400 text-xs truncate">{place.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Right Panel - Map */}
+        <section className="flex-1 relative">
+          <div className="absolute top-4 left-4 z-10">
+            <div className="flex items-center gap-2 bg-white px-3 py-2 rounded-full shadow-md text-sm font-medium text-slate-900">
+              <MapPin size={16} />
+              <span>Ilocos Norte, Philippines</span>
+            </div>
+          </div>
+          <MapComponent destinations={sortedPlaces} />
+        </section>
+      </main>
+    </div>
+  );
+}
