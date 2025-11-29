@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Ilocos Norte Tourism Path Planner
+
+An intelligent path planning application for tourists visiting Ilocos Norte, Philippines. Save time and fuel by optimizing your travel route through the region's top destinations.
+
+## Features
+
+- 🗺️ **Interactive Map** - Visualize destinations on an interactive Mapbox map centered on Laoag City
+- 🎯 **Interest-Based Selection** - Choose from 8 different interest categories (Churches, Beaches, Museums, Cuisine, Nature, Landmarks, History, Shopping)
+- 📍 **Smart Destination Cards** - View destinations with ratings, opening hours, and real-time open/closed status
+- 🤖 **AI Travel Assistant** - Get personalized recommendations through an AI chatbot interface
+- ⏰ **Real-Time Status** - Automatically sort destinations by open/closed status
+
+## Tech Stack
+
+- **Framework**: [Next.js](https://nextjs.org) 16.0.5
+- **React**: 19.2.0
+- **Styling**: Tailwind CSS v4
+- **Maps**: Mapbox GL
+- **UI Components**: Radix UI, Lucide React icons
+- **State Management**: React Hooks
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 18+ installed
+- A Mapbox account and access token ([Get one here](https://account.mapbox.com/))
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd path-planner
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+3. Create a `.env.local` file in the root directory:
+```bash
+NEXT_PUBLIC_MAPBOX_TOKEN=your_mapbox_token_here
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Run the development server:
+```bash
+npm run dev
+```
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── page.jsx          # Landing page
+│   ├── onboarding/       # Interest selection page
+│   └── map/              # Main map view with 3-column layout
+├── components/
+│   ├── ui/               # Reusable UI components
+│   └── map.jsx           # Mapbox map component
+└── lib/
+    └── utils.js          # Utility functions
+```
+
+## Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `NEXT_PUBLIC_MAPBOX_TOKEN` | Your Mapbox access token for map rendering | Yes |
+
+## Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Mapbox GL JS Documentation](https://docs.mapbox.com/mapbox-gl-js/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
