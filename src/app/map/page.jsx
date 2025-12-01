@@ -24,11 +24,6 @@ const anyInterestSelected = (params) => {
 // Rule: matchesInterest(Place, Params) :- interestSelected(Place.type, Params)
 const matchesInterest = (place, params) => interestSelected(place.type, params);
 
-// Rule: shouldShow(Place, Params) :- 
-//   ¬anyInterestSelected(Params) ∨ matchesInterest(Place, Params)
-const shouldShow = (place, params) => 
-  !anyInterestSelected(params) || matchesInterest(place, params);
-
 // Rule: isOpen24Hours(TimeRange) :- TimeRange = "Open 24 hours"
 const isOpen24Hours = (timeRange) => timeRange === "Open 24 hours";
 
@@ -65,6 +60,16 @@ function getIsOpen(timeRange) {
   return withinTimeRange(current, startTime, endTime);
 }
 
+// Rule: shouldShowInCards(Place, Params) :- 
+//   ¬anyInterestSelected(Params) ∨ matchesInterest(Place, Params)
+const shouldShowInCards = (place, params) => 
+  !anyInterestSelected(params) || matchesInterest(place, params);
+
+// Rule: shouldShowOnMap(Place, Params) :- 
+//   shouldShowInCards(Place, Params) ∧ isOpen(Place.timeRange)
+const shouldShowOnMap = (place, params) => 
+  shouldShowInCards(place, params) && getIsOpen(place.timeRange);
+
 // Rule: compareByOpenStatus(A, B) :- 
 //   isOpen(A) ∧ ¬isOpen(B) → -1
 //   ¬isOpen(A) ∧ isOpen(B) → 1
@@ -81,13 +86,17 @@ const compareByOpenStatus = (a, b) => {
 export default function Map() {
   const searchParams = useSearchParams();
   
-  // Query: findPlaces(Params) :- 
-  //   ∀ Place ∈ allPlaces | shouldShow(Place, Params)
-  const filteredPlaces = allPlaces.filter(place => shouldShow(place, searchParams));
+  // Query: findPlacesForCards(Params) :- 
+  //   ∀ Place ∈ allPlaces | shouldShowInCards(Place, Params)
+  const placesForCards = allPlaces.filter(place => shouldShowInCards(place, searchParams));
   
   // Query: sortPlaces(Places) :- 
   //   Places sorted by compareByOpenStatus
-  const sortedPlaces = [...filteredPlaces].sort(compareByOpenStatus);
+  const sortedPlacesForCards = [...placesForCards].sort(compareByOpenStatus);
+  
+  // Query: findPlacesForMap(Params) :- 
+  //   ∀ Place ∈ allPlaces | shouldShowOnMap(Place, Params)
+  const placesForMap = allPlaces.filter(place => shouldShowOnMap(place, searchParams));
 
   return (
     <div className="relative min-h-screen bg-slate-50 font-sans text-slate-900 overflow-hidden selection:bg-orange-100">
@@ -131,13 +140,13 @@ export default function Map() {
                 <Layers size={18} />
                 <span>Destinations</span>
               </div>
-              <span className="text-xs text-slate-500">{sortedPlaces.length} places</span>
+              <span className="text-xs text-slate-500">{sortedPlacesForCards.length} places</span>
             </div>
           </div>
           <div className="flex-1 p-4 overflow-y-auto">
             {/* Destination cards */}
             <div className="grid grid-cols-2 gap-3">
-              {sortedPlaces.map((place, index) => (
+              {sortedPlacesForCards.map((place, index) => (
                 <div
                   key={index}
                   className="bg-slate-50 rounded-xl border border-slate-100 hover:border-slate-300 hover:shadow-sm transition-all cursor-pointer overflow-hidden"
@@ -180,7 +189,7 @@ export default function Map() {
               <span>Ilocos Norte, Philippines</span>
             </div>
           </div>
-          <MapComponent destinations={sortedPlaces} />
+          <MapComponent destinations={placesForMap} />
         </section>
       </main>
     </div>
