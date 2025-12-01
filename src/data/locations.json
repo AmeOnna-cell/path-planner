@@ -7,6 +7,7 @@
       "description": "A 1612 church features Italian Renaissance styling, a stately facade & an adjacent bell tower.",
       "latitude": 18.194137424082157,
       "longitude": 120.5933618231169
+      
     },
     {
       "title": "San Agustin Church of Paoay",
@@ -140,15 +141,6 @@
     },
   
     {
-      "title": "San Agustin Church of Paoay",
-      "type": "landmarks",
-      "timeRange": "Open 24 hours",
-      "rating": 4.7,
-      "description": "Famous for its Baroque-style architecture.",
-      "latitude": 18.061719,
-      "longitude": 120.521028
-    },
-    {
       "title": "Bangui Windmills",
       "type": "landmarks",
       "timeRange": "Open 24 hours",
@@ -167,15 +159,6 @@
       "longitude": 120.597583
     },
     {
-      "title": "Kapurpurawan Rock Formation",
-      "type": "landmarks",
-      "timeRange": "6:00 AM - 6:00 PM",
-      "rating": 4.6,
-      "description": "Noteworthy geological formation by the beach.",
-      "latitude": 18.538737,
-      "longitude": 120.653497
-    },
-    {
       "title": "Patapat Viaduct",
       "type": "landmarks",
       "timeRange": "Open 24 hours",
@@ -183,15 +166,6 @@
       "description": "Elevated concrete bridge featuring picturesque mountain & sea views.",
       "latitude": 18.575581,
       "longitude": 120.894588
-    },
-    {
-      "title": "Malacañang of the North",
-      "type": "landmarks",
-      "timeRange": "9:00 AM - 4:00 PM",
-      "rating": 4.4,
-      "description": "Lakeside 2-story mansion offering a presidential museum.",
-      "latitude": 18.128140,
-      "longitude": 120.540054
     },
   
     {
@@ -202,24 +176,6 @@
       "description": "A historical natural landscape used during World War II.",
       "latitude": 18.094769191341722,
       "longitude": 120.48620654491451
-    },
-    {
-      "title": "Cape Bojeador Lighthouse",
-      "type": "history",
-      "timeRange": "8:00 AM - 5:00 PM",
-      "rating": 4.5,
-      "description": "A Spanish-era lighthouse built in 1892.",
-      "latitude": 18.51382402744815,
-      "longitude": 120.59690473310783
-    },
-    {
-      "title": "Bangui Wind Farm",
-      "type": "history",
-      "timeRange": "Open 24 hours",
-      "rating": 4.4,
-      "description": "Southeast Asia's first wind farm, with historical information markers.",
-      "latitude": 18.529506474899826,
-      "longitude": 120.7180243964388
     },
   
     {
