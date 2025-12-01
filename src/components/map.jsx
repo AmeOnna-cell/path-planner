@@ -144,21 +144,21 @@ export default function Map({ destinations = [] }) {
 
       mapboxgl.default.accessToken = token;
 
-      // Laoag City coordinates: 18.1978° N, 120.5956° E
+      // CCIS Coordinates: 18.059779° N, 120.545021° E
       map.current = new mapboxgl.default.Map({
         container: mapContainer.current,
         style: "mapbox://styles/mapbox/streets-v12",
-        center: [120.5956, 18.1978], // [longitude, latitude]
+        center: [120.545021, 18.059779], // [longitude, latitude]
         zoom: 12,
       });
 
       // Add navigation controls
       map.current.addControl(new mapboxgl.default.NavigationControl(), "top-right");
 
-      // Add user location marker at Laoag City (mock user location)
+      // Add user location marker at CCIS (mock user location)
       const userLocationMarker = createUserLocationMarker();
       new mapboxgl.default.Marker(userLocationMarker)
-        .setLngLat([120.5956, 18.1978])
+        .setLngLat([120.545021, 18.059779])
         .addTo(map.current);
 
       // Add markers for destinations if provided
