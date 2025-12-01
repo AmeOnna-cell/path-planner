@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "mapbox-gl/dist/mapbox-gl.css";
 import {
@@ -14,6 +14,8 @@ import {
   ShoppingBag,
   MapPin,
   User,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
 // Map location types to Lucide React icons
@@ -130,6 +132,34 @@ function createUserLocationMarker() {
 export default function Map({ destinations = [] }) {
   const mapContainer = useRef(null);
   const map = useRef(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Navigate to previous destination
+  const goToPrevious = () => {
+    if (destinations.length === 0) return;
+    const newIndex = currentIndex === 0 ? destinations.length - 1 : currentIndex - 1;
+    setCurrentIndex(newIndex);
+    centerMapOn(destinations[newIndex]);
+  };
+
+  // Navigate to next destination
+  const goToNext = () => {
+    if (destinations.length === 0) return;
+    const newIndex = currentIndex === destinations.length - 1 ? 0 : currentIndex + 1;
+    setCurrentIndex(newIndex);
+    centerMapOn(destinations[newIndex]);
+  };
+
+  // Center map on a specific destination
+  const centerMapOn = (destination) => {
+    if (map.current && destination.latitude && destination.longitude) {
+      map.current.flyTo({
+        center: [destination.longitude, destination.latitude],
+        zoom: 12,
+        duration: 1500,
+      });
+    }
+  };
 
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
@@ -185,7 +215,41 @@ export default function Map({ destinations = [] }) {
   }, [destinations]);
 
   return (
-    <div ref={mapContainer} className="w-full h-full" />
+    <div className="relative w-full h-full">
+      <div ref={mapContainer} className="w-full h-full" />
+      
+      {/* Bottom Navigation Control */}
+      {destinations.length > 0 && (
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10">
+          <div className="flex items-center gap-2 bg-white px-4 py-3 rounded-full shadow-lg border border-slate-200">
+            <button
+              onClick={goToPrevious}
+              className="p-1 hover:bg-slate-100 rounded-full transition-colors"
+              aria-label="Previous destination"
+            >
+              <ChevronLeft size={20} className="text-slate-700" />
+            </button>
+            
+            <div className="px-2 min-w-[200px] text-center">
+              <div className="text-sm font-semibold text-slate-900">
+                {destinations[currentIndex]?.title || 'Unknown'}
+              </div>
+              <div className="text-xs text-slate-500">
+                {currentIndex + 1} of {destinations.length}
+              </div>
+            </div>
+            
+            <button
+              onClick={goToNext}
+              className="p-1 hover:bg-slate-100 rounded-full transition-colors"
+              aria-label="Next destination"
+            >
+              <ChevronRight size={20} className="text-slate-700" />
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
