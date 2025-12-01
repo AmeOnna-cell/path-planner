@@ -13,6 +13,7 @@ import {
   History,
   ShoppingBag,
   MapPin,
+  User,
 } from "lucide-react";
 
 // Map location types to Lucide React icons
@@ -82,6 +83,50 @@ function createMarkerElement(type, title) {
   return container;
 }
 
+function createUserLocationMarker() {
+  // User location marker with pulsing effect
+  const el = document.createElement("div");
+  el.className = "user-location-marker";
+  el.style.cssText = `
+    width: 40px;
+    height: 40px;
+    background-color: #3b82f6;
+    border: 3px solid white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.5);
+    position: relative;
+  `;
+  
+  // Add pulsing animation
+  const style = document.createElement("style");
+  style.textContent = `
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+      }
+    }
+    .user-location-marker {
+      animation: pulse 2s infinite;
+    }
+  `;
+  document.head.appendChild(style);
+  
+  // Render User icon
+  const root = createRoot(el);
+  root.render(<User size={20} color="white" strokeWidth={2.5} />);
+  
+  return el;
+}
+
 export default function Map({ destinations = [] }) {
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -109,6 +154,12 @@ export default function Map({ destinations = [] }) {
 
       // Add navigation controls
       map.current.addControl(new mapboxgl.default.NavigationControl(), "top-right");
+
+      // Add user location marker at Laoag City (mock user location)
+      const userLocationMarker = createUserLocationMarker();
+      new mapboxgl.default.Marker(userLocationMarker)
+        .setLngLat([120.5956, 18.1978])
+        .addTo(map.current);
 
       // Add markers for destinations if provided
       if (destinations && destinations.length > 0) {
